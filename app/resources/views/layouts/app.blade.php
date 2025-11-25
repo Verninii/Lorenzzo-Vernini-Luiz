@@ -17,8 +17,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('clients.index') }}">Clientes</a>
                 </li>
-                {{-- vamos adicionar Products e Orders depois --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('orders.index') }}">Pedidos</a>
+                </li>
             </ul>
+
         </div>
     </div>
 </nav>
