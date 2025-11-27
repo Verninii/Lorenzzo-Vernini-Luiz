@@ -37,7 +37,7 @@
         <tr>
             <th>
                 <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'id', 'direction' => $direction])) }}">
-                    #
+                    Nº
                 </a>
             </th>
             <th>
