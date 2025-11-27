@@ -24,6 +24,23 @@
                     <a class="nav-link" href="{{ route('orders.index') }}">Pedidos</a>
                 </li>
             </ul>
+            <ul class="navbar-nav ms-auto">
+                @auth
+                    <li class="nav-item me-2">
+                        <span class="navbar-text">
+                            Olá, {{ auth()->user()->name }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light btn-sm">
+                                Sair
+                            </button>
+                        </form>
+                    </li>
+                @endauth
+            </ul>
 
         </div>
     </div>
