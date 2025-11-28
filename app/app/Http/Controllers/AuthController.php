@@ -28,7 +28,6 @@ class AuthController extends Controller
                 'password' => Hash::make($data['password']),
             ]);
 
-            // faz login automático após cadastro
             Auth::login($user);
 
             $request->session()->regenerate();

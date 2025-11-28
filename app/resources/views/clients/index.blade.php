@@ -9,6 +9,9 @@
         .rounded-top-end {
         border-top-right-radius: 10px;
     }
+    .width {
+        width: 200px;
+    }
 
 </style>
 <div class="d-flex justify-content-between mb-3">
@@ -17,13 +20,13 @@
 </div>
 
 <form method="GET" class="row mb-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <input type="text" name="search" class="form-control"
                placeholder="Buscar por nome, email, documento"
                value="{{ request('search') }}">
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <select name="per_page" class="form-select" onchange="this.form.submit()">
             @foreach([5, 10, 20, 50] as $size)
                 <option value="{{ $size }}" {{ request('per_page', 20) == $size ? 'selected' : '' }}>
@@ -33,7 +36,7 @@
         </select>
     </div>
 
-    <div class="col-md-2">
+    <div class="col-sm-1">
         <button class="btn btn-secondary" type="submit">Filtrar</button>
     </div>
 </form>

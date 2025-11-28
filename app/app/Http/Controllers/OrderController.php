@@ -11,29 +11,23 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Lista de pedidos com filtro, ordenação e paginação
-     */
+
     public function index(Request $request)
     {
         $query = Order::with('client');
 
-        // Filtro por status
         if ($status = $request->get('status')) {
             $query->where('status', $status);
         }
 
-        // Filtro por cliente
         if ($clientId = $request->get('client_id')) {
             $query->where('client_id', $clientId);
         }
 
-        // Filtro por ID do pedido (busca rápida)
         if ($searchId = $request->get('order_id')) {
             $query->where('id', $searchId);
         }
 
-        // Ordenação
         $sort = $request->get('sort', 'id');
         $direction = $request->get('direction', 'desc');
 
@@ -45,7 +39,7 @@ class OrderController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        // Itens por página
+
         $perPage = (int) $request->get('per_page', 20);
         if (! in_array($perPage, [5, 10, 20, 50])) {
             $perPage = 20;
@@ -53,15 +47,12 @@ class OrderController extends Controller
 
         $orders = $query->paginate($perPage)->appends($request->query());
 
-        // lista de clientes para o filtro
         $clients = Client::orderBy('id')->get();
 
         return view('orders.index', compact('orders', 'clients'));
     }
 
-    /**
-     * Formulário de criação
-     */
+
     public function create()
     {
         $clients  = Client::orderBy('id')->get();
@@ -70,9 +61,7 @@ class OrderController extends Controller
         return view('orders.create', compact('clients', 'products'));
     }
 
-    /**
-     * Armazenar pedido com itens
-     */
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -92,7 +81,7 @@ class OrderController extends Controller
                 'client_id'      => $request->client_id,
                 'status'         => $request->status,
                 'discount_value' => $discount,
-                'total'          => 0, // ajusta depois
+                'total'          => 0, 
             ]);
 
             $productIds = $request->input('product_ids', []);
@@ -105,7 +94,7 @@ class OrderController extends Controller
                 $quantity  = $quantities[$index] ?? null;
 
                 if (!$productId || !$quantity) {
-                    continue; // pula linhas vazias
+                    continue; 
                 }
 
                 $product = Product::findOrFail($productId);
@@ -131,9 +120,7 @@ class OrderController extends Controller
             ->with('success', 'Pedido criado com sucesso.');
     }
 
-    /**
-     * Detalhes do pedido
-     */
+
     public function show(Order $order)
     {
         $order->load('client', 'items.product');
@@ -141,9 +128,7 @@ class OrderController extends Controller
         return view('orders.show', compact('order'));
     }
 
-    /**
-     * Formulário de edição (vamos permitir alterar status e desconto)
-     */
+
     public function edit(Order $order)
     {
         $order->load('client', 'items.product');
@@ -151,9 +136,7 @@ class OrderController extends Controller
         return view('orders.edit', compact('order'));
     }
 
-    /**
-     * Atualizar status e desconto
-     */
+
     public function update(Request $request, Order $order)
     {
         $data = $request->validate([
@@ -163,7 +146,6 @@ class OrderController extends Controller
 
         $discount = (float) ($data['discount_value'] ?? 0);
 
-        // recalcula total aplicando novo desconto
         $itemsTotal = $order->items()->sum('total');
 
         $order->update([
@@ -176,9 +158,6 @@ class OrderController extends Controller
             ->with('success', 'Pedido atualizado com sucesso.');
     }
 
-    /**
-     * Excluir pedido
-     */
     public function destroy(Order $order)
     {
         $order->delete();

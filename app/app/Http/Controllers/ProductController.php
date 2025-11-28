@@ -7,14 +7,11 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Lista de produtos com filtro, ordenação e paginação
-     */
+
     public function index(Request $request)
     {
         $query = Product::query();
 
-        // Filtro: nome ou descrição
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -22,7 +19,6 @@ class ProductController extends Controller
             });
         }
 
-        // Ordenação
         $sort = $request->get('sort', 'id');
         $direction = $request->get('direction', 'asc');
 
@@ -34,7 +30,6 @@ class ProductController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        // Itens por página
         $perPage = (int) $request->get('per_page', 20);
         if (! in_array($perPage, [5, 10, 20, 50])) {
             $perPage = 20;
@@ -45,17 +40,11 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    /**
-     * Formulário de criação
-     */
     public function create()
     {
         return view('products.create');
     }
 
-    /**
-     * Armazenar novo produto
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -70,25 +59,16 @@ class ProductController extends Controller
             ->with('success', 'Produto criado com sucesso.');
     }
 
-    /**
-     * Detalhes
-     */
     public function show(Product $product)
     {
         return view('products.show', compact('product'));
     }
 
-    /**
-     * Formulário de edição
-     */
     public function edit(Product $product)
     {
         return view('products.edit', compact('product'));
     }
 
-    /**
-     * Atualizar produto
-     */
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
@@ -103,9 +83,6 @@ class ProductController extends Controller
             ->with('success', 'Produto atualizado com sucesso.');
     }
 
-    /**
-     * Deletar produto
-     */
     public function destroy(Product $product)
     {
         $product->delete();
