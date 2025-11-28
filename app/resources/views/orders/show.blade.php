@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .rounded-top-start {
+        border-top-left-radius: 5px;
+    }
+        .rounded-top-end {
+        border-top-right-radius: 10px;
+    }
+
+</style>
+
 <h1>Pedido #{{ $order->id }}</h1>
 
 @if(session('success'))
@@ -9,7 +19,7 @@
 
 <ul>
     <li><strong>Cliente:</strong>
-        <a href="{{ route('clients.show', $order->client) }}">
+        <a href="{{ route('clients.show', $order->client) }}" class="text-decoration-none text-body-emphasis">
             {{ $order->client->name }}
         </a>
     </li>
@@ -31,19 +41,19 @@
 
 <div class="table-responsive">
 <table class="table table-striped">
-    <thead>
+    <thead class="table-dark">
         <tr>
-            <th>Produto</th>
+            <th class="rounded-top-start">Produto</th>
             <th>Quantidade</th>
             <th>Valor unitário</th>
-            <th>Subtotal</th>
+            <th class="rounded-top-end">Subtotal</th>
         </tr>
     </thead>
     <tbody>
         @foreach($order->items as $item)
             <tr>
                 <td>
-                    <a href="{{ route('products.show', $item->product) }}">
+                    <a href="{{ route('products.show', $item->product) }}" class="text-decoration-none text-body-emphasis">
                         {{ $item->product->name }}
                     </a>
                 </td>

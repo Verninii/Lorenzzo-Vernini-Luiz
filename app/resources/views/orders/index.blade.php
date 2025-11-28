@@ -1,7 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Pedidos</h1>
+<style>
+    .rounded-top-start {
+        border-top-left-radius: 5px;
+    }
+        .rounded-top-end {
+        border-top-right-radius: 10px;
+    }
+    .width {
+        width: 25%;
+    }
+
+</style>
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>Pedidos</h1>
+    <a href="{{ route('orders.create') }}" class="btn btn-primary d-flex align-items-center fw-semibold fs-6">Novo Pedido</a>
+</div>
 
 <div class="d-flex justify-content-between mb-3">
     <form method="GET" class="row g-2">
@@ -22,7 +38,7 @@
             </select>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2 width">
             <select name="status" class="form-control">
                 <option value="">Todos os status</option>
                 <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Em Aberto</option>
@@ -32,54 +48,41 @@
         </div>
 
         <div class="col-md-2">
-            <select name="per_page" class="form-control" onchange="this.form.submit()">
-                @foreach([10,20,50,100] as $size)
-                    <option value="{{ $size }}" {{ request('per_page',20)==$size ? 'selected' : '' }}>
-                        {{ $size }} por página
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-2">
-            <button class="btn btn-secondary w-100" type="submit">Filtrar</button>
+            <button class="btn btn-secondary w-70" type="submit">Filtrar</button>
         </div>
     </form>
 
-    <div>
-        <a href="{{ route('orders.create') }}" class="btn btn-primary">Novo Pedido</a>
-    </div>
 </div>
 
 <div class="table-responsive">
 <table class="table table-striped">
-    <thead>
+    <thead class="table-dark">
         @php
             $direction = request('direction') === 'asc' ? 'desc' : 'asc';
         @endphp
         <tr>
-            <th>
-                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'id','direction'=>$direction])) }}">
-                    #
+            <th class="rounded-top-start">
+                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'id','direction'=>$direction])) }}" class="text-decoration-none text-light">
+                    Nº
                 </a>
             </th>
             <th>Cliente</th>
             <th>
-                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'status','direction'=>$direction])) }}">
+                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'status','direction'=>$direction])) }}" class="text-decoration-none text-light">
                     Status
                 </a>
             </th>
             <th>
-                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'total','direction'=>$direction])) }}">
+                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'total','direction'=>$direction])) }}" class="text-decoration-none text-light">
                     Total
                 </a>
             </th>
             <th>
-                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'created_at','direction'=>$direction])) }}">
+                <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'created_at','direction'=>$direction])) }}" class="text-decoration-none text-light">
                     Data
                 </a>
             </th>
-            <th>Ações</th>
+            <th class="rounded-top-end">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -87,7 +90,7 @@
             <tr>
                 <td>{{ $order->id }}</td>
                 <td>
-                    <a href="{{ route('clients.show', $order->client) }}">
+                    <a href="{{ route('clients.show', $order->client) }}" class="text-decoration-none text-body-emphasis">
                         {{ $order->client->name }}
                     </a>
                 </td>

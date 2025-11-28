@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Lista de clientes com filtro, ordenação e paginação
-     */
     public function index(Request $request)
     {
         $query = Client::query();
@@ -35,13 +32,7 @@ class ClientController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        // Itens por página (20 default – bônus: usuário pode mudar)
-        $perPage = (int) $request->get('per_page', 20);
-        if (! in_array($perPage, [10, 20, 50, 100])) {
-            $perPage = 20;
-        }
-
-        $clients = $query->paginate($perPage)->appends($request->query());
+        $clients = $query->paginate(5)->appends($request->query());
 
         return view('clients.index', compact('clients'));
     }

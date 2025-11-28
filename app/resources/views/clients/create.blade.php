@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Novo Cliente</h1>
+<h1 class="text-center">Novo Cliente</h1>
 
 <form method="POST" action="{{ route('clients.store') }}" class="mt-3">
     @csrf

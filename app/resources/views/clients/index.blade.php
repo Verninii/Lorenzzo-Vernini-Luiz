@@ -1,9 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+
+<style>
+    .rounded-top-start {
+        border-top-left-radius: 5px;
+    }
+        .rounded-top-end {
+        border-top-right-radius: 10px;
+    }
+
+</style>
 <div class="d-flex justify-content-between mb-3">
     <h1>Clientes</h1>
-    <a href="{{ route('clients.create') }}" class="btn btn-primary">Novo Cliente</a>
+    <a href="{{ route('clients.create') }}" class="btn btn-primary d-flex align-items-center fw-semibold fs-6">Novo Cliente</a>
 </div>
 
 <form method="GET" class="row mb-3">
@@ -14,45 +24,35 @@
     </div>
 
     <div class="col-md-2">
-        <select name="per_page" class="form-control" onchange="this.form.submit()">
-            @foreach([10,20,50,100] as $size)
-                <option value="{{ $size }}" {{ request('per_page',20)==$size ? 'selected' : '' }}>
-                    {{ $size }} por página
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="col-md-2">
         <button class="btn btn-secondary" type="submit">Filtrar</button>
     </div>
 </form>
 
 <div class="table-responsive">
-<table class="table table-striped">
-    <thead>
+<table class="table table-striped rounded-top">
+    <thead class="table-dark">
         @php
             $direction = request('direction') === 'asc' ? 'desc' : 'asc';
         @endphp
         <tr>
-            <th>
-                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'id', 'direction' => $direction])) }}">
+            <th class="rounded-top-start">
+                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'id', 'direction' => $direction])) }}" class="text-decoration-none text-light">
                     Nº
                 </a>
             </th>
             <th>
-                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'name', 'direction' => $direction])) }}">
+                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'name', 'direction' => $direction])) }}" class="text-decoration-none text-light">
                     Nome
                 </a>
             </th>
             <th>
-                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'email', 'direction' => $direction])) }}">
+                <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'email', 'direction' => $direction])) }}" class="text-decoration-none text-light">
                     Email
                 </a>
             </th>
             <th>Documento</th>
             <th>Telefone</th>
-            <th>Ações</th>
+            <th class="rounded-top-end">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -60,7 +60,7 @@
             <tr>
                 <td>{{ $client->id }}</td>
                 <td>
-                    <a href="{{ route('clients.show', $client) }}">{{ $client->name }}</a>
+                    <a href="{{ route('clients.show', $client) }}" class="text-decoration-none text-body-emphasis">{{ $client->name }}</a>
                 </td>
                 <td>{{ $client->email }}</td>
                 <td>{{ $client->document }}</td>
@@ -87,5 +87,6 @@
 </table>
 </div>
 
-{{ $clients->links() }}
+{{ $clients->links('pagination::bootstrap-5') }}
+
 @endsection

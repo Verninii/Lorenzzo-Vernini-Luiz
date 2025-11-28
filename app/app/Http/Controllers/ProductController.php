@@ -40,7 +40,7 @@ class ProductController extends Controller
             $perPage = 20;
         }
 
-        $products = $query->paginate($perPage)->appends($request->query());
+        $products = $query->paginate(5)->appends($request->query());
 
         return view('products.index', compact('products'));
     }
