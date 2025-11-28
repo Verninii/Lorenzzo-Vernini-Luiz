@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    /**
+     * Lista de clientes com filtro, ordenação e paginação
+     */
     public function index(Request $request)
     {
         $query = Client::query();
@@ -32,7 +35,13 @@ class ClientController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $clients = $query->paginate(5)->appends($request->query());
+        // Itens por página (20 default – bônus: usuário pode mudar)
+        $perPage = (int) $request->get('per_page', 20);
+        if (! in_array($perPage, [5, 10, 20, 50])) {
+            $perPage = 20;
+        }
+
+        $clients = $query->paginate($perPage)->appends($request->query());
 
         return view('clients.index', compact('clients'));
     }
@@ -107,4 +116,21 @@ class ClientController extends Controller
         return redirect()->route('clients.index')
             ->with('success', 'Cliente removido com sucesso.');
     }
+
+    public function bulkDestroy(Request $request)
+{
+    $ids = $request->input('ids', []);
+
+    if (empty($ids)) {
+        return redirect()
+            ->route('clients.index')
+            ->with('warning', 'Nenhum cliente selecionado para exclusão.');
+    }
+
+    Client::whereIn('id', $ids)->delete();
+
+    return redirect()
+        ->route('clients.index')
+        ->with('success', 'Clientes selecionados foram excluídos com sucesso.');
+}
 }

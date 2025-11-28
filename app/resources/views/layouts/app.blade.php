@@ -10,10 +10,17 @@
         min-height: 100vh;
         background: linear-gradient(
             to bottom,                  
-            white 75%,          
+            white 90%,          
             #0B5ED7 100%        
         );
     }
+     @media (max-width: 991.98px) {
+            .container-main {
+                max-width: 90% !important;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
 </style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -55,7 +62,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container container-main">
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -64,6 +71,7 @@
 
     @yield('content')
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

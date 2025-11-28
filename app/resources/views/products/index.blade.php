@@ -23,6 +23,16 @@
                value="{{ request('search') }}">
     </div>
 
+    <div class="col-md-3">
+        <select name="per_page" class="form-select" onchange="this.form.submit()">
+            @foreach([5, 10, 20, 50] as $size)
+                <option value="{{ $size }}" {{ request('per_page', 20) == $size ? 'selected' : '' }}>
+                    {{ $size }} por página
+                </option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="col-md-2">
         <button class="btn btn-secondary" type="submit">Filtrar</button>
     </div>
@@ -37,7 +47,7 @@
         <tr>
             <th class="rounded-top-start">
                 <a href="{{ route('products.index', array_merge(request()->all(), ['sort'=>'id','direction'=>$direction])) }}" class="text-decoration-none text-light">
-                    Nº
+                    ID
                 </a>
             </th>
             <th>

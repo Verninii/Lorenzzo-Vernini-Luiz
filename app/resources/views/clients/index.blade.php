@@ -23,10 +23,24 @@
                value="{{ request('search') }}">
     </div>
 
+    <div class="col-md-3">
+        <select name="per_page" class="form-select" onchange="this.form.submit()">
+            @foreach([5, 10, 20, 50] as $size)
+                <option value="{{ $size }}" {{ request('per_page', 20) == $size ? 'selected' : '' }}>
+                    {{ $size }} por página
+                </option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="col-md-2">
         <button class="btn btn-secondary" type="submit">Filtrar</button>
     </div>
 </form>
+
+<form method="POST" action="{{ route('clients.bulk-destroy') }}" id="bulk-delete-form">
+    @csrf
+    @method('DELETE')
 
 <div class="table-responsive">
 <table class="table table-striped rounded-top">
@@ -35,9 +49,10 @@
             $direction = request('direction') === 'asc' ? 'desc' : 'asc';
         @endphp
         <tr>
-            <th class="rounded-top-start">
+            <th class="rounded-top-start">Seleção</th>
+            <th>
                 <a href="{{ route('clients.index', array_merge(request()->all(), ['sort' => 'id', 'direction' => $direction])) }}" class="text-decoration-none text-light">
-                    Nº
+                    ID
                 </a>
             </th>
             <th>
@@ -58,6 +73,12 @@
     <tbody>
         @forelse($clients as $client)
             <tr>
+                <td>
+                    <input type="checkbox"
+                               name="ids[]"
+                               value="{{ $client->id }}"
+                               class="client-checkbox">
+                </td>
                 <td>{{ $client->id }}</td>
                 <td>
                     <a href="{{ route('clients.show', $client) }}" class="text-decoration-none text-body-emphasis">{{ $client->name }}</a>
@@ -86,7 +107,31 @@
     </tbody>
 </table>
 </div>
+<div class="d-flex justify-content-between mb-2">
+        <div></div>
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Tem certeza que deseja excluir os clientes selecionados?')">
+            Excluir selecionados
+        </button>
+    </div>
+</form>
 
 {{ $clients->links('pagination::bootstrap-5') }}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAll = document.getElementById('select-all');
+        const checkboxes = document.querySelectorAll('.client-checkbox');
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                checkboxes.forEach(cb => {
+                    cb.checked = selectAll.checked;
+                });
+            });
+        }
+    });
+</script>
 @endsection
+

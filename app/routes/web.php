@@ -18,6 +18,8 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::delete('clients/bulk-destroy', [ClientController::class, 'bulkDestroy'])
+    ->name('clients.bulk-destroy');
     Route::resource('clients', ClientController::class);
     Route::resource('products', ProductController::class);
     Route::resource('orders', OrderController::class);

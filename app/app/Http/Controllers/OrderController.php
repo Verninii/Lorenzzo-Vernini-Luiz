@@ -47,7 +47,7 @@ class OrderController extends Controller
 
         // Itens por página
         $perPage = (int) $request->get('per_page', 20);
-        if (! in_array($perPage, [10, 20, 50, 100])) {
+        if (! in_array($perPage, [5, 10, 20, 50])) {
             $perPage = 20;
         }
 

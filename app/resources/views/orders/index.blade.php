@@ -8,8 +8,11 @@
         .rounded-top-end {
         border-top-right-radius: 10px;
     }
-    .width {
+    .width-status {
         width: 25%;
+    }
+    .width-id {
+        width: 10%;
     }
 
 </style>
@@ -21,9 +24,9 @@
 
 <div class="d-flex justify-content-between mb-3">
     <form method="GET" class="row g-2">
-        <div class="col-md-2">
+        <div class="col-md-2 width-id">
             <input type="number" name="order_id" class="form-control"
-                   placeholder="ID do pedido"
+                   placeholder="ID"
                    value="{{ request('order_id') }}">
         </div>
 
@@ -47,6 +50,16 @@
             </select>
         </div>
 
+          <div class="col-md-2 width-status">
+            <select name="per_page" class="form-select" onchange="this.form.submit()">
+                @foreach([10, 20, 50, 100] as $size)
+                    <option value="{{ $size }}" {{ request('per_page', 20) == $size ? 'selected' : '' }}>
+                        {{ $size }} por página
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="col-md-2">
             <button class="btn btn-secondary w-70" type="submit">Filtrar</button>
         </div>
@@ -63,7 +76,7 @@
         <tr>
             <th class="rounded-top-start">
                 <a href="{{ route('orders.index', array_merge(request()->all(), ['sort'=>'id','direction'=>$direction])) }}" class="text-decoration-none text-light">
-                    Nº
+                    ID
                 </a>
             </th>
             <th>Cliente</th>
@@ -125,5 +138,5 @@
 </table>
 </div>
 
-{{ $orders->links() }}
+{{ $orders->links('pagination::bootstrap-5') }}
 @endsection
